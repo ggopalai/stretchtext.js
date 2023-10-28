@@ -1,17 +1,12 @@
-// dont use iife, use modules instead
-(function () {
-  // es5 construct, modules are strict by default in es6
-  "use strict";
-
+export default function entry() {
   const TITLE_WHEN_CLOSED = "Expand";
   const TITLE_WHEN_OPEN = "Collapse";
 
-  // tries to use the native requestAnimationFrame, browser-specific, but falls back to setTimeout
-  // requestAnimationFrame shimming.
   /*
-		Optimzes animations on the browser. 
-		Stops animations in inactive tabs. 
-		Good for battery.
+    Tries to use the native requestAnimationFrame, browser-specific, but falls back to setTimeout
+    requestAnimationFrame shimming.
+		Optimzes animations on the browser. Stops animations in inactive tabs. 
+		Good for battery optimization. Synchronizes with the browser's refresh rate.
 	*/
   const requestAnimationFrame =
     window.requestAnimationFrame ||
@@ -27,15 +22,15 @@
   /**
    * Toggles the visibility of the HTML element selected by the event.
    *
-   * @param {Event} evt
-   * @returns
+   * @param {Event} evt - The event that triggered the toggle.
+   *
    */
   function toggleSummary(evt) {
     // Prevent the text from being selected if rapidly clicked.
     evt.preventDefault();
 
-    var summary = evt.target;
-    var detail = findDetailFor(summary);
+    const summary = evt.target;
+    const detail = findDetailFor(summary);
     if (!detail) {
       return;
     }
@@ -56,6 +51,8 @@
       if (summary.classList.contains("stretchtext-open")) {
         setTitle(summary, TITLE_WHEN_OPEN);
       } else {
+        console.log("setting title to Expand");
+        // not changing the title here, debug further.
         setTitle(summary, TITLE_WHEN_CLOSED);
       }
     });
@@ -64,8 +61,8 @@
   /**
    * Checks if the given HTML element is an anchor (<a>) tag.
    *
-   * @param {HTMLElement} summary
-   * @returns {boolean}
+   * @param {HTMLElement} summary - The element to check.
+   * @returns {boolean} - True if the element is an anchor tag.
    */
   function isBlockLevelDetail(summary) {
     return summary.nodeName.toLowerCase() === "a";
@@ -74,9 +71,9 @@
   /**
    * Set title attribute on the HTML element.
    *
-   * @param {HTMLElement} summary
-   * @param {String} title
-   * @returns
+   * @param {HTMLElement} summary - The element to set the title on.
+   * @param {String} title - The title to set.
+   *
    */
   function setTitle(summary, title) {
     // If the user placed a manual title on the summary leave it alone.
@@ -92,19 +89,19 @@
    * For <a> tags, gets the element the id in the href.
    * For other tags, gets the next sibling.
    *
-   * @param {HTMLElement} summary
-   * @returns {HTMLElement}
+   * @param {HTMLElement} summary - The element to get the next element for.
+   * @returns {HTMLElement} - The next element to display.
    */
   function findDetailFor(summary) {
     if (isBlockLevelDetail(summary)) {
-      var id = summary.getAttribute("href").replace(/^#/, "");
-      var detail = document.getElementById(id);
+      const id = summary.getAttribute("href").replace(/^#/, "");
+      const detail = document.getElementById(id);
       if (!detail && window.console) {
         console.error("No StretchText details element with ID: " + id);
       }
       return detail;
     } else {
-      var detail = summary.nextElementSibling;
+      const detail = summary.nextElementSibling;
       if (!detail && window.console) {
         console.error("No StretchText details element found for: ", summary);
       }
@@ -114,7 +111,7 @@
 
   /**
    * Gets all the summaries in the document.
-   * @returns {Array} of all the summaries in the document
+   * @returns {Array} - of all the summaries in the document
    */
   function getSummaries() {
     let results = [];
@@ -138,7 +135,6 @@
    * Gets called once the DOM has laoded. Fetches all the summaries
    * and sets the title and binds various eventListeners.
    *
-   * @returns
    */
   function loaded() {
     if (loadedCalled) {
@@ -174,4 +170,4 @@
   if (document.readyState == "complete") {
     loaded();
   }
-})();
+}

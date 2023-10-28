@@ -1,54 +1,68 @@
+:root {
+  --border-color: hsl(0, 0%, 50%);
+  --transition-duration: 0.6s;
+  --left-double-angle-quote: "\00ab"; /* << character */
+  --right-double-angle-quote: "\00bb"; /* >> character */
+  --double-angle-color: hsl(1, 63%, 44%);
+}
 
+/* summary elements */
 [epub-type="stretchsummary"],
 [epub\:type="stretchsummary"],
 .stretchsummary {
-	border: 1px dashed gray;
-	cursor: pointer;
-	color: inherit;
-	text-decoration: none;
+  border: 1px dashed var(--border-color);
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
 }
 
+/* pseudo-class */
 [epub-type="stretchsummary"]:hover,
 [epub\:type="stretchsummary"]:hover,
 .stretchsummary:hover {
-	border-style: solid;
+  border-style: solid;
 }
 
+/* pseudo-element */
 [epub-type="stretchsummary"]::after,
 [epub\:type="stretchsummary"]::after,
 .stretchsummary::after {
-	content: "\00bb"; /* >> character */
-	color: #88886d;
-	padding-left: 3px;
-	padding-right: 3px;
+  content: var(--right-double-angle-quote); /* >> character */
+  color: var(--double-angle-color);
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
+/* next-sibling combinator */
 [epub-type="stretchsummary"] + [epub-type="stretchdetail"],
 [epub\:type="stretchsummary"] + [epub\:type="stretchdetail"],
 .stretchsummary + .stretchdetail {
-	margin-left: 0.1em;
+  margin-left: 0.1em;
 }
 
+/* details */
 [epub-type="stretchdetail"],
 [epub\:type="stretchdetail"],
 .stretchdetail {
-	display: none;
-	opacity: 0;
-	-webkit-transition: opacity 0.2s ease-out;
-	-moz-transition: opacity 0.2s ease-out;
-	-o-transition: opacity 0.2s ease-out;
-	transition: opacity 0.2s ease-out;
+  display: none;
+  opacity: 0;
+  -webkit-transition: opacity var(--transition-duration) ease-out;
+  -moz-transition: opacity var(--transition-duration) ease-out;
+  -o-transition: opacity var(--transition-duration) ease-out;
+  transition: opacity var(--transition-duration) ease-out;
 }
 
+/* select elements with both the attribute and the class */
 [epub-type="stretchdetail"].stretchtext-open,
 [epub\:type="stretchdetail"].stretchtext-open,
 .stretchdetail.stretchtext-open {
-	opacity: 1;
-	background-color: #FAF0E6;
+  opacity: 1;
+  background-color: #faf0e6;
 }
 
+/* pseudo-element for the elements selected above */
 [epub-type="stretchsummary"].stretchtext-open::after,
 [epub\:type="stretchsummary"].stretchtext-open::after,
 .stretchsummary.stretchtext-open::after {
-	content: "\00ab"; /* << character */
+  content: var(--left-double-angle-quote);
 }
